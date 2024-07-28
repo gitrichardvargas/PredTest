@@ -1,4 +1,27 @@
-
+#' Filter by Group Variable
+#'
+#' This function takes a data frame with two groups and splits them by a group identifier and specified column variables.
+#'
+#' @param df A data frame which must have a column to identify two different groups.
+#' @param grp_var The column with the two groups, e.g., 'Treatment'.
+#' @param grp_1 The first group identifier in the `grp_var` column, e.g., 'control'.
+#' @param grp_2 The second group identifier in the `grp_var` column, e.g., 'drug_a'.
+#' @param vars The column variables the researcher is interested in. The researcher can subset the columns instead of using all potential column variables.
+#'
+#' @return A list of two data frames that are subsets of the original data frame, separated by their group status.
+#'
+#' @details This function checks if the input data frame, group variable, and column variables are valid. It ensures that the specified groups exist within the group variable column. The function then filters the data for each group and returns a list containing the filtered data frames.
+#'
+#' @examples
+#' # Load example data
+#' data("pre_post_data_example")
+#'
+#' # Use the function to filter by group
+#' result <- filter_by_group_var(pre_post_data_example, grp_var = "time", grp_1 = 0, grp_2 = 12, vars = c("v1", "v2"))
+#' print(result$group_1)
+#' print(result$group_2)
+#'
+#' @export
 filter_by_group_var = function(df, grp_var, grp_1, grp_2, vars) {
   # Check if df is a data frame
   if (!is.data.frame(df)) {
@@ -28,3 +51,4 @@ filter_by_group_var = function(df, grp_var, grp_1, grp_2, vars) {
   # Place the data frames into a list and return it
   return(list(group_1 = grp_1_vars, group_2 = grp_2_vars))
 }
+

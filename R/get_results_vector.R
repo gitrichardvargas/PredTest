@@ -1,23 +1,76 @@
-get_results_vector <- function(hypothesis, differences, vars = NULL, diff_method = 'wilcoxon', grp_a = NULL, grp_b = NULL, phi_0=0.5) {
+
+#' Get Results Vector
+#'
+#' This function receives user input on the hypothesis of the experiment results and informs the user if the hypotheses were correct. It can handle hypotheses of 'increase', 'decrease', or 'different', and performs appropriate statistical tests.
+#'
+#' @param hypothesis A string or a vector of strings where the string or all elements of the vector are in the set of {'decrease', 'increase', 'different'}. If it’s a string, it will be converted to a vector of the same length as `differences` with all elements being the valid string.
+#' @param differences A numeric vector representing the differences between two groups.
+#' @param diff_method A string specifying the method to use for testing 'different' hypotheses. Valid options are 'wilcoxon' or 't'. Defaults to 'wilcoxon'.
+#' @param grp_a A data frame representing the first group for testing 'different' hypotheses. This argument is only needed if 'different' is part of the hypothesis.
+#' @param grp_b A data frame representing the second group for testing 'different' hypotheses. This argument is only needed if 'different' is part of the hypothesis.
+#' @param phi_0 A numeric value on the interval (0, 1) representing the decision rule threshold for the p-value. Defaults to 0.5.
+#'
+#' @return A numeric vector of 0s and 1s. If the hypothesis was incorrect, a 0 is returned. If the hypothesis was correct, a 1 is returned.
+#'
+#' @details The function checks if the input hypotheses are valid, and performs the necessary statistical tests to determine if the hypotheses were correct. It handles 'increase' and 'decrease' hypotheses by comparing differences, and 'different' hypotheses by performing either a Wilcoxon signed-rank test or a paired t-test.
+#'
+#' @examples
+#' # Example data
+#' differences <- c(0.5, -0.2, 0.1)
+#' grp_a <- data.frame(v1 = rnorm(10), v2 = rnorm(10), v3 = rnorm(10))
+#' grp_b <- data.frame(v1 = rnorm(10), v2 = rnorm(10), v3 = rnorm(10))
+#'
+#' # Test with 'increase' and 'decrease' hypotheses
+#' get_results_vector(hypothesis = c('increase', 'decrease', 'increase'), differences = differences)
+#'
+#' # Test with 'different' hypothesis
+#' get_results_vector(hypothesis = c('increase', 'different', 'decrease'), differences = differences, grp_a = grp_a, grp_b = grp_b, phi_0 = 0.05)
+#'
+#' @export
+get_results_vector <- function(hypothesis, differences, diff_method = 'wilcoxon', grp_a = NULL, grp_b = NULL, phi_0=0.5) {
 
   n = length(differences)
   valid_hypotheses <- c('decrease', 'increase', 'different')
   valid_diff_methods = c('wilcoxon', 't')
 
-  # vars, grp_a and grp_b not null if 'different' in hypothesis
-  # vars needs to be length n
+  # grp_a and grp_b not null if 'different' in hypothesis
 
-  if (is.vector(differences) && !all(sapply(differences, function(x) is.numeric(x)))) { # differences numeric vector
-    stop("differences must be a vector containing numeric values")
+  # -differences isn't a  numeric vector
+  if (!is.numeric(differences) || any(!is.finite(differences))) {
+    stop("differences must be a numeric vector")
   }
 
-  # diff_method one of 't' or 'wilcoxon'
+  # if hypothesis isn't a string of a valid hypothesis: increase, decrease, or different
+  # or vector a of valid hypotheses: increase, decrease, or different
+  if (!(is.character(hypothesis) && all(hypothesis %in% valid_hypotheses))) {
+    stop("hypothesis must be either a valid string or a vector of valid strings: 'increase', 'decrease', 'different'")
+  }
 
-  # if grp_a and grp_b not null then grp_a and grp_b column variables need to be the same
-  # then vars needs to be a valid subset of grp_a column variables
+  # there are arguments that are set to NULL but 'different' is part of the hypothesis
+  if ('different' %in% hypothesis && (is.null(grp_a) || is.null(grp_b))) {
+    stop("Both grp_a and grp_b must be provided when 'different' is part of the hypothesis")
+  }
 
-  # if hypothesis is a string in valid_hypotheses,
-  # then hypothesis_vector is a vector of length n of hypothesis
+  # if grp_a and grp_b are different sizes
+  if (!is.null(grp_a) && !is.null(grp_b) && (nrow(grp_a) != nrow(grp_b) || ncol(grp_a) != ncol(grp_b))) {
+    stop("grp_a and grp_b must have the same dimensions")
+  }
+
+
+  # columns in grp_a and grp_b should be numeric.
+  if (any(sapply(grp_a, function(x) !is.numeric(x))) || any(sapply(grp_b, function(x) !is.numeric(x)))) {
+    stop("All columns in grp_a and grp_b must be numeric")
+  }
+
+  # diff_method isn't equal to 'wilcoxon' or 't'
+  if (!diff_method %in% c('wilcoxon', 't')) {
+    stop("diff_method must be either 'wilcoxon' or 't'")
+  }
+
+  # phi_0 isn't numeric and on the interval (0,1)
+  if (!is.numeric(phi_0) || phi_0 <= 0 || phi_0 >= 1) {
+    stop("phi_0 must be a numeric value within the interval (0, 1)")
+  }
   if (is.character(hypothesis) && length(hypothesis) == 1) {
     hypothesis_vector <- switch(
       hypothesis[[1]],
@@ -32,9 +85,9 @@ get_results_vector <- function(hypothesis, differences, vars = NULL, diff_method
   }
 
   # error handling and variable assignment
-  # verifying equal length of hypothesis_vector, vars, and differences
+  # verifying equal length of hypothesis_vectorand differences
   if (length(hypothesis_vector) != length(differences)){
-    stop("differences, vars, and  hypothesis must be same length vectors, unless hypothesis is a string")
+    stop("differences and  hypothesis must be same length vectors, unless hypothesis is a string")
   }
 
   # creating results vector
@@ -49,16 +102,12 @@ get_results_vector <- function(hypothesis, differences, vars = NULL, diff_method
     } else if (hypothesis_vector[i] == 'decrease' && differences[i] < 0) {
       results[i] <- 1
     } else if (hypothesis_vector[i] == 'different') {
-      if (diff_method == 'wilcoxon') {
-        # do wilcox.test on vars[i] in grp_a and grp_b
-        test_result <- wilcox.test(grp_a[[vars[i]]], grp_b[[vars[i]]], paired = TRUE, alternative = "two.sided")
-      } else if (diff_method == 't') {
-        # do t.test on vars[i] in grp_a and grp_b
-        test_result <- t.test(grp_a[[vars[i]]], grp_b[[vars[i]]], paired = TRUE)
+      if (diff_method == 't') {
+        test_result <- t.test(grp_a[[i]], grp_b[[i]], paired = TRUE)
+      } else if (diff_method == 'wilcoxon') {
+        test_result <- wilcox.test(grp_a[[i]], grp_b[[i]], paired = TRUE)
       }
-      if (test_result$p.value < phi_0){
-        results[i] <- 1
-      }
+      results[i] <- if (test_result$p.value < phi_0) 1 else 0
     } else {
       results[i] <- 0
     }

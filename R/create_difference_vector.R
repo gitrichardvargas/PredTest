@@ -1,3 +1,22 @@
+#' Create a Difference Vector
+#'
+#' This function calculates the difference between two groups of data based on a specified location measure (median or mean).
+#'
+#' @param grp_1_data A data frame where all columns are numeric, representing the first group of data.
+#' @param grp_2_data A data frame where all columns are numeric, representing the second group of data.
+#' @param location A string specifying the location measure to use for calculating differences. Must be either 'median' or 'mean'.
+#'
+#' @return A numeric vector representing the differences between the second group's location measure and the first group's location measure for each column.
+#'
+#' @details The function checks if the specified location measure is valid ('median' or 'mean'). It also checks if both groups of data are numeric and if they have the same size and column variables. Based on the location measure, it calculates the differences and returns them as a numeric vector.
+#'
+#' @examples
+#' grp_1 <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))
+#' grp_2 <- data.frame(a = c(2, 3, 4), b = c(5, 6, 7))
+#' create_difference_vector(grp_1, grp_2, location = 'median')
+#' create_difference_vector(grp_1, grp_2, location = 'mean')
+#'
+#' @export
 create_difference_vector <- function(grp_1_data, grp_2_data, location='median') {
   possible_locations = c('median', 'mean')
 
@@ -6,20 +25,14 @@ create_difference_vector <- function(grp_1_data, grp_2_data, location='median') 
     stop("Invalid location specified. Choose 'median' or 'mean'.")
   }
 
-  # Check if both inputs are of the same type and either data frames or matrices
-  if (!(is.data.frame(grp_1_data) && is.data.frame(grp_2_data)) &&
-      !(is.matrix(grp_1_data) && is.matrix(grp_2_data))) {
-    stop("Both grp_1_data and grp_2_data must be of the same type and either data frames or matrices")
-  }
-
   # Check if both grp_1_data and grp_2_data are numeric
   if (!all(sapply(grp_1_data, is.numeric)) || !all(sapply(grp_2_data, is.numeric))) {
     stop("All columns in grp_1_data and grp_2_data must be numeric.")
   }
 
   # Check if grp_1_data and grp_2_data are the same size
-  if (nrow(grp_1_data) != nrow(grp_2_data) || ncol(grp_1_data) != ncol(grp_2_data)) {
-    stop("grp_1_data and grp_2_data must have the same dimensions.")
+  if (ncol(grp_1_data) != ncol(grp_2_data)) {
+    stop("grp_1_data and grp_2_data must have the same number of rows")
   }
 
   # Check if the column variables are the same
@@ -39,4 +52,7 @@ create_difference_vector <- function(grp_1_data, grp_2_data, location='median') 
     return(unname(as.vector(differences)))
   }
 }
+
+
+
 
