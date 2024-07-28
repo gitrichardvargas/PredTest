@@ -92,8 +92,6 @@ pred_results <- function(dataset,
     df_b <- dfs$post
   }
 
-  print(df_a)
-  print(df_b)
   diff_vector <- create_difference_vector(df_a, df_b, location) # vector of the differences between groups
   # a vector of 1s (correctly predicted) and 0s (incorrectly predicted)
   print(diff_vector)
