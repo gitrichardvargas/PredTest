@@ -94,7 +94,6 @@ pred_results <- function(dataset,
 
   diff_vector <- create_difference_vector(df_a, df_b, location) # vector of the differences between groups
   # a vector of 1s (correctly predicted) and 0s (incorrectly predicted)
-  print(diff_vector)
   results = get_results_vector(hypothesis, diff_vector, diff_method=diff_method, grp_a=df_a, grp_b=df_b) # grp_a/b don't need to be defined here, but it doesn't do anything if they are
 
   output <- list(results=results, differences=diff_vector, variables=vars) #col vars with desired for each one
