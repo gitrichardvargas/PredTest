@@ -35,8 +35,30 @@ test_that("filter_by_time_var works as expected", {
   )
 
 
+
+  # EXPECTED ERRORS
   expect_error(filter_by_time_var(mini_unbalanced,"id", "time", 0, 6, c("v1", "v3")),
                "pre and post should have an equal size")
+
+  # Error if vars not in data frame
+  expect_error(filter_by_time_var(mini_example, "id", "time", 0, 6, c("v1", "X-Wing")),
+               "All elements in 'vars' must be valid column names in the data frame.")
+
+  # Error if df isn't a data frame
+  expect_error(filter_by_time_var("A string isn't a data frame", "id", "time", 0, 6, c("v1", "v3")),
+               "The input 'df' must be a data frame.")
+
+  # Error if time_var isn't a column variable
+  expect_error(filter_by_time_var(mini_example, "id", "TIE fighter", 0, 6, c("v1", "v3")),
+               "The specified 'time_var' is not a column in the data frame.")
+
+  # Error if id isn't a column variable
+  expect_error(filter_by_time_var(mini_example, "jedi", "time", 0, 6, c("v1", "v3")),
+               "The specified 'id' is not a column in the data frame.")
+
+  # Error if grp_1 or grp_2 are not valid row variables in time_var
+  expect_error(filter_by_time_var(mini_example,"id", "time", 2, 3, c("v1", "v3")),
+               "Both 'pre' and 'post' must be valid elements in the specified 'time_var' column.")
 
   # Testing correct function execution
   output = filter_by_time_var(mini_example,"id", "time", 0, 6, c("v1", "v3"))
@@ -44,6 +66,8 @@ test_that("filter_by_time_var works as expected", {
   # Expected data frames
   pre_expected_df = data.frame(v1 = c(1.5, -1.6), v3 = c(-0.3, 0.2))
   post_expected_df = data.frame(v1 = c(0.2, 0.3), v3 = c(-1.4, -1.0))
+
+
 
   # Test the return value
   expect_true(is.list(output), "Output should be a list")
