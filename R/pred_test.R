@@ -66,14 +66,6 @@ pred_test <- function(weights_vector, results_vector, test_type='exact', phi_0 =
     stop("phi_0 must be a numeric value on the interval (0,1).")
   }
 
-  solve_p0_score_ci <- function(p_hat, n, z = 1.96) {
-    center <- (1 / (1 + (z^2 / n))) * (p_hat + (z^2 / (2 * n)))
-    diff <- (z / (1 + (z^2 / n))) * ((p_hat * (1 - p_hat) / n) + (z^2 / (4 * (n^2)))) ^ 0.5
-    lower <- center - diff
-    upper <- center + diff
-    return(list(p0 = center, confidence_interval = c(lower, upper)))
-  }
-
   test_stat <- weights_vector %*% results_vector
   phi_hat <- (1/sum(weights_vector)*test_stat)
   score_list <- solve_p0_score_ci(phi_hat, length(weights_vector), 1.96 )

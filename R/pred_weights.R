@@ -16,30 +16,21 @@
 #' @details This function performs error handling to ensure appropriate input values and types. It calculates the correlation matrix for the specified variables and then computes the predictive weights as the inverse square sum of the correlation matrix.
 #'
 #' @examples
-#' # Load example data
 #' data("group_data_example")
+#' data("group_cog_data")
 #' data("pre_post_data_example")
+#' data("pre_post_fit")
 #'
-#' # Example usage for group-based data
-#' weights_group <- pred_weights(
-#'   dataset = group_data_example,
-#'   vars = c("v1", "v2", "v3"),
-#'   gtvar = "group",
-#'   type = "group"
-#' )
-#' print(weights_group)
+#'# simple group
+#'pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
+#'# simple prepost
+#'pred_weights(dataset=pre_post_data_example, vars=c('v1', 'v2', 'v3'), gtvar='time', id='ID', pre=0,post=12)
+# simulated group
+#'pred_weights(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), gtvar='group.factor')
+# simulated prepost
+#'pred_weights(dataset=pre_post_fit, vars=c('Flex_right', 'Flex_left'), gtvar='Time',id='ID', pre=0, post=1)
 #'
-#' # Example usage for pre-post data
-#' weights_prepost <- pred_weights(
-#'   dataset = pre_post_data_example,
-#'   vars = c("v1", "v2", "v3"),
-#'   gtvar = "time",
-#'   type = "prepost",
-#'   id = "ID",
-#'   pre = 0,
-#'   post = 12
-#' )
-#' print(weights_prepost)
+#'
 #'
 #' @export
 pred_weights <- function(dataset, vars, gtvar, type = "group", id=NULL, pre=NULL, post=NULL, corr_method = "pearson") {
@@ -72,3 +63,14 @@ pred_weights <- function(dataset, vars, gtvar, type = "group", id=NULL, pre=NULL
   weights <- 1/rowSums(samplec^2)
   return(weights)
 }
+
+# simple group
+pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
+# simple prepost
+pred_weights(dataset=pre_post_data_example, vars=c('v1', 'v2', 'v3'), gtvar='time', id='ID', pre=0,post=12)
+# simulated group
+pred_weights(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), gtvar='group.factor')
+# simulated prepost
+pred_weights(dataset=pre_post_fit, vars=c('Flex_right', 'Flex_left'), gtvar='Time',
+             id='ID', pre=0, post=1)
+

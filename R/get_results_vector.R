@@ -15,10 +15,35 @@
 #' @details The function checks if the input hypotheses are valid, and performs the necessary statistical tests to determine if the hypotheses were correct. It handles 'increase' and 'decrease' hypotheses by comparing differences, and 'different' hypotheses by performing either a Wilcoxon signed-rank test or a paired t-test.
 #'
 #' @examples
-#' # Example data
-#' differences <- c(0.5, -0.2, 0.1)
-#' grp_a <- data.frame(v1 = rnorm(10), v2 = rnorm(10), v3 = rnorm(10))
-#' grp_b <- data.frame(v1 = rnorm(10), v2 = rnorm(10), v3 = rnorm(10))
+#' data("group_data_example")
+#' data("group_cog_data")
+#' data("pre_post_data_example")
+#' data("pre_post_fit")
+#'
+#' # Example 1: Using group_data_example with 'increase' hypothesis
+#' grp_1_data <- subset(group_data_example, group == 'placebo', select = c('v1', 'v2'))
+#' grp_2_data <- subset(group_data_example, group == 'drug', select = c('v1', 'v2'))
+#' differences <- create_difference_vector(grp_1_data, grp_2_data, location='mean')
+#' get_results_vector(hypothesis = 'increase', differences = differences)
+#'
+#' # Example 2: Using pre_post_data_example with 'decrease' hypothesis
+#' pre_data <- subset(pre_post_data_example, time == 0, select = c('v1', 'v2', 'v3'))
+#' post_data <- subset(pre_post_data_example, time == 12, select = c('v1', 'v2', 'v3'))
+#' differences <- create_difference_vector(pre_data, post_data, location='median')
+#' get_results_vector(hypothesis = 'decrease', differences = differences)
+#'
+#' # Example 3: Using group_cog_data with mixed 'increase' and 'decrease' hypothesis
+#' control_data <- subset(group_cog_data, group.factor == 'Control', select = c('blind_moca_uncorrected', 'craft_verbatim'))
+#' eskd_data <- subset(group_cog_data, group.factor == 'ESKD', select = c('blind_moca_uncorrected', 'craft_verbatim'))
+#' differences <- create_difference_vector(control_data, eskd_data, location='mean')
+#' get_results_vector(hypothesis = c('increase', 'decrease'), differences = differences)
+#'
+#' # Example 4: Using pre_post_fit with 'different' hypothesis and Wilcoxon test
+#' pre_fit <- subset(pre_post_fit, Time == 0, select = c('Flex_right', 'Flex_left'))
+#' post_fit <- subset(pre_post_fit, Time == 1, select = c('Flex_right', 'Flex_left'))
+#' differences <- create_difference_vector(pre_fit, post_fit, location='mean')
+#' get_results_vector(hypothesis = 'different', differences = differences, diff_method = 'wilcoxon', grp_a = pre_fit, grp_b = post_fit)
+#'
 #'
 #' # Test with 'increase' and 'decrease' hypotheses
 #' get_results_vector(hypothesis = c('increase', 'decrease', 'increase'), differences = differences)
