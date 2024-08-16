@@ -21,14 +21,26 @@
 #' data("pre_post_data_example")
 #' data("pre_post_fit")
 #'
+#' # end points for variables
+#' grp_endpts <- c(
+#'     "mean_suv","blind_moca_uncorrected","craft_verbatim","craft_delay_verbatim",
+#'     "number_span_forward","number_span_backward","fluency_f_words_correct",
+#'     "oral_trail_part_a","oral_trail_part_b","fluency_animals","fluency_vegetables",
+#'     "verbal_naming_no_cue"
+#'     )
+#' prepost_endpts <- c(
+#'     "COPM_p", "COPM_s", "A1_work", "A2_work", "Grip_dom",
+#'     "Grip_ndom",  "Flex_right", "Flex_left"
+#'     )
 #'# simple group
 #'pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
 #'# simple prepost
-#'pred_weights(dataset=pre_post_data_example, vars=c('v1', 'v2', 'v3'), gtvar='time', id='ID', pre=0,post=12)
-# simulated group
-#'pred_weights(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), gtvar='group.factor')
-# simulated prepost
-#'pred_weights(dataset=pre_post_fit, vars=c('Flex_right', 'Flex_left'), gtvar='Time',id='ID', pre=0, post=1)
+#'pred_weights(dataset=pre_post_data_example, vars=c('v1','v2','v3'), gtvar='time', id='ID', pre=0,post=12)
+#' # simulated group
+#'pred_weights(dataset=group_cog_data, vars=grp_endpts, gtvar="group.factor", type="group",corr_method="pearson")
+#' # simulated prepost
+#'pred_weights(dataset=pre_post_fit, id="ID", vars=endpoints2, gtvar="Time", type="prepost",
+#'        pre=0, post=1, corr_method="pearson")
 #'
 #'
 #'

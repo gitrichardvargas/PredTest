@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("pre_test works", {
 
   w <- c(0.5, 0.75, 1)
   r <- c(0, 1, 1)
