@@ -56,33 +56,22 @@ This function is a wrapper that conditionally handles filtering by group or time
 This function performs error handling to ensure appropriate input values and types. It then filters the data based on the study type, calculates the difference vector, and evaluates the hypotheses using the specified method.
 }
 \examples{
-# Load example data
 data("group_data_example")
+data("group_cog_data")
 data("pre_post_data_example")
+data("pre_post_fit")
 
-# Example usage for group-based data
-result_group <- pred_results(
-  dataset = group_data_example,
-  vars = c("v1", "v2"),
-  type = "group",
-  hypothesis = c("increase", "decrease"),
-  gtvar = "group",
-  grp_a = "placebo",
-  grp_b = "drug"
-)
-print(result_group)
+# simple group analysis
+pred_results(dataset=group_data_example, vars=c('v1', 'v2',), type="group",
+hypothesis=c("increase", "different"), gtvar="group", grp_a="placebo", grp_b="drug")
 
-# Example usage for pre-post data
-result_prepost <- pred_results(
-  dataset = pre_post_data_example,
-  id = "ID",
-  vars = c("v1", "v2"),
-  type = "prepost",
-  hypothesis = c("increase", "decrease"),
-  gtvar = "time",
-  grp_a = 0,
-  grp_b = 12
-)
-print(result_prepost)
+# simple prepost analysis
+pred_results(dataset=pre_post_data_example, id="ID", vars=c('v1', 'v2', 'v3'),
+type="prepost", hypothesis="increase", gtvar="time", grp_a=0, grp_b=12)
 
+# simulated group analysis
+pred_results(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), type="group", hypothesis="decrease", gtvar="group.factor", grp_a="Control", grp_b="ESKD")
+
+# simulated prepost analysis
+pred_results(dataset=pre_post_fit, id="ID", vars=c('Flex_right', 'Flex_left'), type="prepost", hypothesis="increase", gtvar="Time", grp_a=0, grp_b=1)
 }

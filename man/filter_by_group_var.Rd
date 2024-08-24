@@ -28,10 +28,10 @@ This function checks if the input data frame, group variable, and column variabl
 }
 \examples{
 # Load example data
-data("pre_post_data_example")
+data("group_data_example")
 
 # Use the function to filter by group
-result <- filter_by_group_var(pre_post_data_example, grp_var = "time", grp_1 = 0, grp_2 = 12, vars = c("v1", "v2"))
+result <- filter_by_group_var(group_data_example, grp_var = "time", grp_1 = 0, grp_2 = 12, vars = c("v1", "v2"))
 print(result$group_1)
 print(result$group_2)
 
