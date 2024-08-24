@@ -16,10 +16,13 @@
 #' }
 #'
 #' @examples
-#' # Example 1
+#' data("group_cog_data")
+#' data(adjusted_example)
+#'
+#' # simple example
 #' pred_adjusted(adjusted_example, c("decrease", "increase"), c('v1', 'v2'), 'sex', "group", 0)
 #'
-#' # Example 2
+#' # simulated example
 #' pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",
 #'               vars = c('craft_verbatim', 'fluency_f_words_correct'),
 #'               covariates = c('number_span_forward', 'number_span_backward'),
