@@ -11,31 +11,11 @@
 #' @details The function checks if the specified location measure is valid ('median' or 'mean'). It also checks if both groups of data are numeric and if they have the same size and column variables. Based on the location measure, it calculates the differences and returns them as a numeric vector.
 #'
 #' @examples
-#' data("group_data_example")
-#' data("group_cog_data")
-#' data("pre_post_data_example")
-#' data("pre_post_fit")
+#' df_1 <- data.frame(v1 = c(1, 2, 100),v2 = c(4, 5, 6))
+#' df_2 <- data.frame(v1 = c(7, 6, 5),v2 = c(4, 3, 2))
 #'
-#' # Example 1: Using group_data_example
-#' grp_1_data <- subset(group_data_example, group == 'placebo', select = c('v1', 'v2'))
-#' grp_2_data <- subset(group_data_example, group == 'drug', select = c('v1', 'v2'))
-#' create_difference_vector(grp_1_data, grp_2_data, location='mean')
-#'
-#' # Example 2: Using pre_post_data_example
-#' pre_data <- subset(pre_post_data_example, time == 0, select = c('v1', 'v2', 'v3'))
-#' post_data <- subset(pre_post_data_example, time == 12, select = c('v1', 'v2', 'v3'))
-#' create_difference_vector(pre_data, post_data, location='median')
-#'
-#' # Example 3: Using group_cog_data
-#' control_data <- subset(group_cog_data, group.factor == 'Control', select = c('blind_moca_uncorrected', 'craft_verbatim'))
-#' eskd_data <- subset(group_cog_data, group.factor == 'ESKD', select = c('blind_moca_uncorrected', 'craft_verbatim'))
-#' create_difference_vector(control_data, eskd_data, location='mean')
-#'
-#' # Example 4: Using pre_post_fit
-#' pre_fit <- subset(pre_post_fit, Time == 0, select = c('Flex_right', 'Flex_left'))
-#' post_fit <- subset(pre_post_fit, Time == 1, select = c('Flex_right', 'Flex_left'))
-#' create_difference_vector(pre_fit, post_fit, location='mean')
-
+#' create_difference_vector(df_2, df_1, 'median')
+#' create_difference_vector(df_2, df_1, 'mean')
 #'
 #' @export
 create_difference_vector <- function(grp_1_data, grp_2_data, location='median') {
