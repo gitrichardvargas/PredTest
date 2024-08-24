@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' data("group_cog_data")
-#' data(adjusted_example)
+#' data("adjusted_example")
 #'
 #' # simple example
 #' pred_adjusted(adjusted_example, c("decrease", "increase"), c('v1', 'v2'), 'sex', "group", 0)
