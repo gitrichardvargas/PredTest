@@ -14,12 +14,12 @@
 #'
 #' @examples
 #' # Load example data
-#' data("group_data_example")
+#' #data("group_data_example")
 #'
 #' # Use the function to filter by group
-#' result <- filter_by_group_var(df=group_data_example, grp_var = "group", grp_1 = 'placebo', grp_2 = 'drug', vars = c("v1", "v2"))
-#' print(result$group_1)
-#' print(result$group_2)
+#' #result <- filter_by_group_var(df=group_data_example, grp_var="group",grp_1 ='placebo',grp_2 ='drug',vars=c("v1", "v2"))
+#' #print(result$group_1)
+#' #print(result$group_2)
 #'
 #' @export
 filter_by_group_var = function(df, grp_var, grp_1, grp_2, vars) {
