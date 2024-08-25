@@ -16,7 +16,7 @@
 #' @details This function performs error handling to ensure appropriate input values and types. It calculates the correlation matrix for the specified variables and then computes the predictive weights as the inverse square sum of the correlation matrix.
 #'
 #' @examples
-#' #data("group_data_example")
+#' data("group_data_example")
 #' data("group_cog_data")
 #' data("pre_post_data_example")
 #' data("pre_post_fit")
@@ -33,7 +33,7 @@
 #'     "Grip_ndom",  "Flex_right", "Flex_left"
 #'     )
 #'# simple group
-#'#pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
+#'pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
 #'# simple prepost
 #'pred_weights(dataset=pre_post_data_example, vars=c('v1','v2','v3'), gtvar='time', id='ID', pre=0,post=12)
 #' # simulated group
