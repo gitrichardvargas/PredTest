@@ -1,0 +1,227 @@
+---
+title: "Getting-Started-with-PredTest"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting-Started-with-PredTest}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE, warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup}
+devtools::install_github("gitrichardvargas/PredTest")
+library(PredTest)
+data("group_cog_data")
+data("pre_post_fit")
+
+library(kableExtra)
+```
+
+## Introduction
+
+This vignette explains how to use the 'pred_results', 'pred_weights' and 'pred_test' functions in the PredTest package to carry out the prediction test (Montgomery and Mahnken, 2020). 
+
+### Prediction test
+The prediction test is a recently proposed global hypothesis test. The idea of the test is to assess whether a researcher's priori beliefs (predictions) about what will happen during a study are borne out by the data. The null hypothesis of the prediction test concerns the parameter $\phi$, the "predictive ability" across the set of endpoints, specifically, $H_{0}: \phi = \phi_{0}$. If $\phi_{0} = 0.50$ then the null hypothesis is that the researcher's predictions, or theory, is no better at predicting the outcomes than by chance. This type of hypothesis is especially useful in early stage studies such as pilots when many outcomes are collected and there is a desire to know if the overall hypothesis is reasonable (Montgomery, Ptomey and Mahnken, 2022). 
+
+For example a researcher may believe that a set of twenty endpoints will increase in the treatment group relative to the control group. If at the end of the study all of them have, then this provides some evidence that the researcher's theory accurately predicts what will occur. In practice when many endpoints are collected there is often a high degree of multicollinearity; the prediction test adjusts for how similar endpoints are through weights, $w_{i}$ defined as the squared inverse row sums of the correlation matrix. This ensures that endpoints that are more unique have greater weight toward the overall test statistic which is defined as $\sum_{=1}^{m} p_{i}w_{i}$ where $p_{i}$ is the dichotomous result for endpoint $i$ and $w_{i}$ is the corresponding weight for that endpoint.
+
+The test has an exact distribution and has an asymptotically normal approximation with good performance for $\geq 20$ endpoints. 
+
+### Data Sets
+
+#### Group Example
+
+The data set we use as a group study example comes from a study on blood brain barrier (BBB) permeability in patients with End Stage Kidney Disease (ESKD). In a recent pilot study (Gupta et al., 2023) explored the feasibility of measuring BBB permeability using a novel method (standardized uptake values: SUV) due to contraindications with traditional MRI based methods in patients with ESKD. The research team hypothesized that SUV would be higher in ESKD patients relative to control, and a results on the National Alzheimer's Coordinating Center Uniform Data Set telephone cognitive battery (T-cog) tests would be worse in ESKD patients relative to control.
+
+The T-cog consists of the following tests: MoCA, Immediate and Delayed recall, Digit span forward and backward, Verbal fluency, Trailmaking A and B, Category fluency animals and vegetables and Verbal naming. All T-cog scores were expected to be be worse in ESKD patients than control, with the specific hypothesized effects shown in Table 1. For example, the average Oral trail making score was expected to be higher (increase) in ESKD relative to Control.
+
+#### Pre/Post Example 
+
+As an example, we consider a small data set consisting of response pre- and post-intervention to a set of physical fitness outcomes from 10 adults with disabilities. It was hypothesized that all endpoints would improve after the intervention, which corresponds to an increasing score on all endpoints except A2 work capacity. In this data set we have one subject with missing grip strength data, in order to calculate the differences and weights, we remove those rows.
+
+
+
+```{r table1, echo = FALSE}
+# end points by study type (subsets of column variables of interest to a researcher)
+
+grp_endpts <- c(
+    "mean_suv","blind_moca_uncorrected","craft_verbatim","craft_delay_verbatim",
+    "number_span_forward","number_span_backward","fluency_f_words_correct",
+    "oral_trail_part_a","oral_trail_part_b","fluency_animals","fluency_vegetables",
+    "verbal_naming_no_cue"
+)
+
+prepost_endpts <- c(
+    "COPM_p", "COPM_s", "A1_work", "A2_work", "Grip_dom",
+    "Grip_ndom",  "Flex_right", "Flex_left"
+)
+
+# hypotheses for each data set 
+
+cog_hyps <- c("increase", "decrease", "decrease", "decrease", "decrease", "decrease", "decrease", "increase", "increase",
+              "decrease", "decrease", "decrease")
+
+fit_cog_hyps<- c("increase", "increase", "increase", "decrease", "increase", "increase", "increase", "increase")
+
+# display of each hypothesis for each variable
+tab1 <- data.frame(grp_endpts, cog_hyps)
+colnames(tab1) <- c("Variable", "Hypothesized result")
+knitr::kable(tab1, align = "ll") %>%   kable_styling(full_width = F)
+
+```
+
+
+### Example Data Used
+
+```{r}
+head(group_cog_data, 10)
+head(pre_post_fit, 10)
+```
+
+### Using PredTest
+
+To calculate the prediction test we need to know the results of the hypothesized effects for each endpoint and the associated weights. The PredTest package has several helper functions to calculate these required statistics.
+
+#### pred_results
+The pred_results function takes a set of variables from a data set and compares whether the observed results align with the predictions that were made. Here we specify the predictions (hyps), the corresponding variables (endpoints), the dataset, type of study (group: between group), the grouping/time variable (gtvar) and the names of the group categories with (grp_a) being the reference category. We then pass these arguments to the pred_results function and get the required output.
+
+##### Group Example 
+
+```{r resultsEx, echo = TRUE}
+
+group_results <- pred_results(dataset=group_cog_data, hypothesis=cog_hyps, 
+                            vars=grp_endpts, type="group", gtvar="group.factor", 
+                            grp_a="Control", grp_b ="ESKD", location="mean")
+
+group_results
+```
+##### Pre/Post Example 
+
+```{r}
+pre_post_fit <- pre_post_fit[complete.cases(pre_post_fit),]
+pre_post_results <- pred_results(dataset = pre_post_fit,
+                        id = "ID", hypothesis = fit_cog_hyps,
+                        vars = prepost_endpts, type = "prepost",
+                        gtvar = "Time", grp_a = 0,
+                        grp_b = 1, location = "mean")
+
+pre_post_results
+```
+
+We can see that 10 of the 12 endpoints were correctly predicted (results$results).
+
+#### pred_weights
+We also need to calculate the associated weights for each endpoints, we want to adjust for the fact that many of these endpoints are highly correlated, for example the correlation between craft verbatim and craft verbatim delayed is 0.90. We want to down weight variables that are highly correlated so that correctly predicting them is worth less than correctly predicting independent variables.
+
+Number span backwards has the highest estimated weight (0.61) while fluency (animals) has the lowest (0.32), this is because the fleuncy variable was highly correlated (> $|0.50|$) with four other variables in the data set. 
+
+To better understand the weighting, consider the extreme example where all endpoints were perfectly correlated (e.g., weight measured in pounds, kilograms, and ounces). In this case each of the three endpoints would recieve a weight of 1/3, so that correctly predicting all three endpoints would be given the weight of correctly predicting one endpoint.
+
+##### Group Example 
+```{r weightsEx, echo = TRUE}
+
+group_weights <- pred_weights(dataset=group_cog_data, 
+                              vars=grp_endpts,gtvar="group.factor", 
+                              type="group",corr_method="pearson")
+
+group_weights
+
+
+```
+##### Pre/Post Example 
+
+```{r}
+pre_post_weights <- pred_weights(dataset = pre_post_fit,
+                        id = "ID",
+                        vars = prepost_endpts,
+                        gtvar =  "Time", 
+                        type = "prepost",
+                        pre = 0,
+                        post = 1,
+                        corr_method = "pearson")
+pre_post_weights
+```
+
+
+#### pred_test
+Given the weights and results we can now calculate the prediction test. The pred_test function requires a vector of the weights and results and the specification of how the p-value should be calculated (exact, normal approximation, or parametric bootstrap). We can use the output from the pred_results and pred_weights functions to populate these arguments.
+
+##### Group Example
+
+```{r testEx, echo=TRUE}
+
+pred_test(weights_vector = group_weights, results_vector = group_results$results, test_type = "exact", phi_0 = 0.5)
+
+
+```
+
+
+##### Pre/Post Example 
+
+```{r testEx, echo=TRUE}
+
+pred_test(weights_vector = pre_post_weights, 
+          results_vector = pre_post_results$results,
+          test_type = "exact")
+```
+For this data set all 8 endpoints moved in the hypothesized direction, so the test statistic was the most extreme possible. Using the exact test there are $2^{8} = 256$ possible tests statistics, so the p-value is $1/256 = 0.004$ and we would reject the null hypothesis.
+
+### Adjusting for covariates
+Adjusting for the effect of covariates can be important, especially when we know demographic factors  influence the response. With the JASN data set we have data on the age of participants and we know that age is associated with results on cognitive tests. We also seem to have imbalance between the control and ESKD groups on age with ESKD patients younger on average than controls. We might expect the difference between groups to be even stronger when we adjust for the effect of age.
+
+```{r age, echo=FALSE}
+par(mfrow = c(1,2))
+plot(datas$blind_moca_uncorrected~datas$age)
+boxplot(datas$age~datas$group.factor)
+
+
+```
+
+
+To adjust for covariates we use the framework of multivariate multiple regression models (MMR). A MMR model is of the form $\textbf{Y} = \textbf{X}\beta + \epsilon$ where $\textbf{Y}$ is an n x m matrix of responses with each tow corresponding to a single participant and $\textbf{X}$ is an n x (q + 1) design matrix where q is the number of covariates. The unadjusted prediction test can be specified where $\textbf{X}$ is an n x 2 matrix, with the first column of 1's and the second column a dummy variable indicating group membership (0 or 1). Then the $\hat{\beta}$s are simply the differences in means for Group 1 and Group 0 which we can then dichotomize into the results based on the predictions. It can also be shown that the sample correlation matrix estimated from the unadjusted MMR model is equivalent to the sample correlation matrix of the raw data, thus the unadjusted prediction test can be calculated from the estimated Betas and correlation matrix from the MMR model. To adjust for covariates such as age, we simply include them in the MMR model and use the model estimated Beta's and correlation matrix to calculate an adjusted prediction test.
+
+#### pred_adjusted
+
+The pred_adjusted function calculates the adjusted results and weights which can then be passed to the pred_results function. The function is only available for between group studies and cannot incorporate a prediction of a 'difference' on an endpoint.
+
+The function provides both the results and weights which can be passed to the pred_test function. The function call is similar to the pred_results function call with the adition of the covariates argument which is how we specify what variables to adjust for and the ref argument which is the reference category for the group variable, in our example it's the control group.
+
+
+```{r adjusted, echo=TRUE}
+
+adjusted <- pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",
+              vars = c('craft_verbatim', 'fluency_f_words_correct'),
+              covariates = c('number_span_forward', 'number_span_backward'),
+              group = "group.factor", ref = "Control")
+
+pred_test(results_vector = adjusted$results,
+          weights_vector = adjusted$weights,
+          test_type = "exact")
+
+
+```
+
+When adjusting for age we see stronger results than before. We've now correctly predicted 11 of the 12 endpoints which leads to a smaller p-value (roughly 0.002 vs 0.02). oral_trail_part_a was incorrectly predicted when using the raw data; it was hypothesized that the score would be higher in ESKD vs Control but they had the same average score. However, when adjusting for the effect of age, we get a positive estimated effect for ESKD relative to group.
+
+
+### Note on data sets
+The data sets used in these examples and provided with the PredTest package are not the exact same as that analyzed in Gupta et al. or from the fitness data set  The real data set cannot be released except by request, and thus the supplied data set was simulated to maintain the key properties of the real data.
+
+## References
+
+Gupta A, Bansal A, Young, KY, Gautam A, Donald J, Comfort B, Montgomery RN. Blood–Brain Barrier Permeability in ESKD—A Proof-of-Concept Study. Journal of the American Society of Nephrology 34(9):p 1508-1511, September 2023. | DOI: 10.1681/ASN.0000000000000167
+
+Montgomery RN, Mahnken JD. A prediction-based test for multiple endpoints. Statistics in Medicine. 2020; 39: 4267–4280. https://doi.org/10.1002/sim.8724
+
+Montgomery RN, Ptomey LT, & Mahnken JD. A flexible test for early-stage studies with multiple endpoints. Journal of Applied Statistics. 2022, 15: 3048–3061. https://doi.org/10.1080/02664763.2022.2097204
+
+
