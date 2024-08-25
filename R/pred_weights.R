@@ -75,13 +75,4 @@ pred_weights <- function(dataset, vars, gtvar, type = "group", id=NULL, pre=NULL
   return(weights)
 }
 
-# simple group
-pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
-# simple prepost
-pred_weights(dataset=pre_post_data_example, vars=c('v1', 'v2', 'v3'), gtvar='time', id='ID', pre=0,post=12)
-# simulated group
-pred_weights(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), gtvar='group.factor')
-# simulated prepost
-pred_weights(dataset=pre_post_fit, vars=c('Flex_right', 'Flex_left'), gtvar='Time',
-             id='ID', pre=0, post=1)
 
