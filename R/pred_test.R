@@ -2,8 +2,8 @@
 #' Predictive Test Function
 #'
 #' This function performs statistical tests to determine the predictive power of a results set weighted by a corresponding vector of weights. It offers various methods to conduct the test, allowing flexibility depending on the data characteristics and analysis requirements.
-#'
-#' @param weights_vector A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval [1/m, 1], where m = 1/length(weights_vector)
+#' @importFrom stats pnorm rbinom
+#' @param weights_vector A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval \eqn{[1/m, 1]}, where \eqn{m = 1/length(weights_vector)}.
 #' @param results_vector A numeric vector of test results where each element is in the set {0, 1}, representing the binary outcome of each prediction.
 #' @param test_type A character string specifying the type of statistical test to perform. The valid options are 'exact', 'approx', or 'bootstrap'.
 #' @param phi_0 A numeric value on the interval (0, 1) representing the null hypothesis value against which the test results are compared.
@@ -22,20 +22,20 @@
 #'
 #' @examples
 #' # Example weights and results vectors
-#' weights_vector <- c(0.25, 0.5, 0.75)
+#' weights_vector <- c(1/3, 0.5, 1)
 #' results_vector <- c(0, 1, 1)
 #'
 #' # Exact test
 #' result_exact <- pred_test(weights_vector, results_vector, test_type = 'exact')
-#' print(result_exact)
+#' result_exact
 #'
 #' # Approximate test
 #' result_approx <- pred_test(weights_vector, results_vector, test_type = 'approx')
-#' print(result_approx)
+#' result_approx
 #'
 #' # Bootstrap test
 #' result_bootstrap <- pred_test(weights_vector, results_vector, test_type = 'bootstrap')
-#' print(result_bootstrap)
+#' result_bootstrap
 #'
 #' @export
 pred_test <- function(weights_vector, results_vector, test_type='exact', phi_0 = 0.5, sims = 5000) {

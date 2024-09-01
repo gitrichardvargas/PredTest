@@ -39,7 +39,7 @@
 #' # simulated group
 #'pred_weights(dataset=group_cog_data, vars=grp_endpts, gtvar="group.factor", type="group",corr_method="pearson")
 #' # simulated prepost
-#'pred_weights(dataset=pre_post_fit, id="ID", vars=endpoints2, gtvar="Time", type="prepost",
+#'pred_weights(dataset=pre_post_fit, id="ID", vars=prepost_endpts, gtvar="Time", type="prepost",
 #'        pre=0, post=1, corr_method="pearson")
 #'
 #'

@@ -37,9 +37,6 @@ data("adjusted_example")
 pred_adjusted(adjusted_example, c("decrease", "increase"), c('v1', 'v2'), 'sex', "group", 0)
 
 # simulated example
-pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",
-              vars = c('craft_verbatim', 'fluency_f_words_correct'),
-              covariates = c('number_span_forward', 'number_span_backward'),
-              group = "group.factor", ref = "Control")
+pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",vars = c('craft_verbatim', 'fluency_f_words_correct'),covariates = c('number_span_forward', 'number_span_backward'),group = "group.factor", ref = "Control")
 
 }

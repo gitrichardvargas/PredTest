@@ -13,7 +13,7 @@ pred_test(
 )
 }
 \arguments{
-\item{weights_vector}{A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval \link{1/m, 1}, where m = 1/length(weights_vector)}
+\item{weights_vector}{A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval \eqn{[1/m, 1]}, where \eqn{m = 1/length(weights_vector)}.}
 
 \item{results_vector}{A numeric vector of test results where each element is in the set {0, 1}, representing the binary outcome of each prediction.}
 
@@ -41,19 +41,19 @@ This function performs error handling to ensure appropriate input values and typ
 }
 \examples{
 # Example weights and results vectors
-weights_vector <- c(0.25, 0.5, 0.75)
+weights_vector <- c(1/3, 0.5, 1)
 results_vector <- c(0, 1, 1)
 
 # Exact test
 result_exact <- pred_test(weights_vector, results_vector, test_type = 'exact')
-print(result_exact)
+result_exact
 
 # Approximate test
 result_approx <- pred_test(weights_vector, results_vector, test_type = 'approx')
-print(result_approx)
+result_approx
 
 # Bootstrap test
 result_bootstrap <- pred_test(weights_vector, results_vector, test_type = 'bootstrap')
-print(result_bootstrap)
+result_bootstrap
 
 }

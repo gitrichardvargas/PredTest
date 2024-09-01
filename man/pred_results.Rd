@@ -62,12 +62,10 @@ data("pre_post_data_example")
 data("pre_post_fit")
 
 # simple group analysis
-pred_results(dataset=group_data_example, vars=c('v1', 'v2',), type="group",
-hypothesis=c("increase", "different"), gtvar="group", grp_a="placebo", grp_b="drug")
+pred_results(dataset=group_data_example, vars=c('v1', 'v2'),hypothesis=c("increase", "different"), gtvar="group", grp_a="placebo", grp_b="drug")
 
 # simple prepost analysis
-pred_results(dataset=pre_post_data_example, id="ID", vars=c('v1', 'v2', 'v3'),
-type="prepost", hypothesis="increase", gtvar="time", grp_a=0, grp_b=12)
+pred_results(dataset=pre_post_data_example, id="ID", vars=c('v1', 'v2', 'v3'),type="prepost", hypothesis="increase", gtvar="time", grp_a=0, grp_b=12)
 
 # simulated group analysis
 pred_results(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), type="group", hypothesis="decrease", gtvar="group.factor", grp_a="Control", grp_b="ESKD")

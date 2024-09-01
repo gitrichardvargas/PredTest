@@ -31,9 +31,9 @@ create_difference_vector <- function(grp_1_data, grp_2_data, location='median') 
     stop("All columns in grp_1_data and grp_2_data must be numeric.")
   }
 
-  # Check if grp_1_data and grp_2_data are the same size
+  # Check if grp_1_data and grp_2_data have the same number of columns
   if (ncol(grp_1_data) != ncol(grp_2_data)) {
-    stop("grp_1_data and grp_2_data must have the same number of rows")
+    stop("grp_1_data and grp_2_data must have the same number of columns.")
   }
 
   # Check if the column variables are the same

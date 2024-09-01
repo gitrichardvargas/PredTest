@@ -7,7 +7,10 @@ test_that("Testing create_difference_vector", {
     v3 = c(7, 8, 9)
   )
   df_2 = df_1 + 2 # adds 2 to all values in df_1, shifts by 2
-
+  df_smaller = data.frame(
+    v1 = c(1, 2, 3),
+    v2 = c(4, 5, 6)
+  )
   mat_1 = as.matrix(df_1)
   mat_2 = mat_1 + 2
 
@@ -22,10 +25,9 @@ test_that("Testing create_difference_vector", {
   expect_error(create_difference_vector(df_1, df_non_numeric),
                "All columns in grp_1_data and grp_2_data must be numeric.")
 
-  # Error if grp_1_data and grp_2_data aren't the same size
-  df_smaller = df_1[1:2, ]
+  # Error if grp_1_data and grp_2_data aren't the same size (same number of columns)
   expect_error(create_difference_vector(df_1, df_smaller),
-               "grp_1_data and grp_2_data must have the same dimensions.")
+               "grp_1_data and grp_2_data must have the same number of columns.")
 
   # Error if grp_1_data or grp_2_data is a data frame, but the other isn't already covered by type consistency test
 
