@@ -18,28 +18,39 @@ pred_weights(
 \arguments{
 \item{dataset}{A data frame containing the dataset to be analyzed.}
 
-\item{vars}{A vector of strings specifying the names of the variables to be used in the correlation analysis.}
+\item{vars}{A vector of strings specifying the names of the variables to be used
+in the correlation analysis.}
 
-\item{gtvar}{The name of the categorical variable used to identify groups in 'prepost' type analysis.}
+\item{gtvar}{The name of the categorical variable used to identify groups in
+'prepost' type analysis.}
 
-\item{type}{The type of analysis. Valid values are 'group' for group-based correlation analysis or 'prepost' for pre-post analysis. Defaults to 'group'.}
+\item{type}{The type of analysis. Valid values are 'group' for group-based
+correlation analysis or 'prepost' for pre-post analysis. Defaults to 'group'.}
 
-\item{id}{The variable in the dataset that uniquely identifies subjects in a 'prepost' analysis. This should not be \code{NULL} if \code{type} is 'prepost'.}
+\item{id}{The variable in the dataset that uniquely identifies subjects in a
+'prepost' analysis. This should not be \code{NULL} if \code{type} is 'prepost'.}
 
 \item{pre}{Specifies the baseline time point for 'prepost' analysis.}
 
 \item{post}{Specifies the follow-up time point for 'prepost' analysis.}
 
-\item{corr_method}{The method of correlation. Valid options are 'pearson', 'kendall', or 'spearman'. Defaults to 'pearson'.}
+\item{corr_method}{The method of correlation. Valid options are 'pearson',
+'kendall', or 'spearman'. Defaults to 'pearson'.}
 }
 \value{
 A numeric vector of predictive weights for each variable analyzed.
 }
 \description{
-This function calculates predictive weights by computing the inverse square sum of a correlation matrix derived from the specified variables. In 'group' analysis, it directly uses the variables for correlation. In 'prepost' analysis, it calculates the difference between two time points before correlation.
+This function calculates predictive weights by computing the inverse square sum of a
+correlation matrix derived from the specified variables. In 'group' analysis, it
+directly uses the variables for correlation. In 'prepost' analysis, it calculates
+the difference between two time points before correlation.
 }
 \details{
-This function performs error handling to ensure appropriate input values and types. It calculates the correlation matrix for the specified variables and then computes the predictive weights as the inverse square sum of the correlation matrix.
+This function performs error handling to ensure appropriate input
+values and types. It calculates the correlation matrix for the specified
+variables and then computes the predictive weights as the inverse square
+sum of the correlation matrix.
 }
 \examples{
 data("group_data_example")
@@ -61,12 +72,14 @@ prepost_endpts <- c(
 # simple group
 pred_weights(dataset=group_data_example, vars=c('v1', 'v2'), gtvar='group')
 # simple prepost
-pred_weights(dataset=pre_post_data_example, vars=c('v1','v2','v3'), gtvar='time', id='ID', pre=0,post=12)
+pred_weights(dataset=pre_post_data_example, vars=c('v1','v2','v3'),
+gtvar='time', id='ID', pre=0,post=12)
 # simulated group
-pred_weights(dataset=group_cog_data, vars=grp_endpts, gtvar="group.factor", type="group",corr_method="pearson")
+pred_weights(dataset=group_cog_data, vars=grp_endpts, gtvar="group.factor",
+type="group",corr_method="pearson")
 # simulated prepost
-pred_weights(dataset=pre_post_fit, id="ID", vars=prepost_endpts, gtvar="Time", type="prepost",
-       pre=0, post=1, corr_method="pearson")
+pred_weights(dataset=pre_post_fit, id="ID", vars=prepost_endpts,
+gtvar="Time", type="prepost",pre=0, post=1, corr_method="pearson")
 
 
 }

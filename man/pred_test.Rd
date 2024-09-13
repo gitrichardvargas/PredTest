@@ -15,7 +15,7 @@ pred_test(
 \arguments{
 \item{weights_vector}{A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval \eqn{[1/m, 1]}, where \eqn{m = 1/length(weights_vector)}.}
 
-\item{results_vector}{A numeric vector of test results where each element is in the set {0, 1}, representing the binary outcome of each prediction.}
+\item{results_vector}{A numeric vector of test results where each element is in the set \{0, 1\}, representing the binary outcome of each prediction.}
 
 \item{test_type}{A character string specifying the type of statistical test to perform. The valid options are 'exact', 'approx', or 'bootstrap'.}
 

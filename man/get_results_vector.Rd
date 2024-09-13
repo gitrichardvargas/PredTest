@@ -14,26 +14,43 @@ get_results_vector(
 )
 }
 \arguments{
-\item{hypothesis}{A string or a vector of strings where the string or all elements of the vector are in the set of {'decrease', 'increase', 'different'}. If it’s a string, it will be converted to a vector of the same length as \code{differences} with all elements being the valid string.}
+\item{hypothesis}{A string or a vector of strings where the string or all
+elements of the vector are in the set of \{'decrease', 'increase', 'different'\}.
+If it’s a string, it will be converted to a vector of the same length as
+\code{differences} with all elements being the valid string.}
 
-\item{differences}{A numeric vector representing the differences between two groups.}
+\item{differences}{A numeric vector representing the differences between
+two groups.}
 
-\item{diff_method}{A string specifying the method to use for testing 'different' hypotheses. Valid options are 'wilcoxon' or 't'. Defaults to 'wilcoxon'.}
+\item{diff_method}{A string specifying the method to use for testing
+'different' hypotheses. Valid options are 'wilcoxon' or 't'.
+Defaults to 'wilcoxon'.}
 
-\item{grp_a}{A data frame representing the first group for testing 'different' hypotheses. This argument is only needed if 'different' is part of the hypothesis.}
+\item{grp_a}{A data frame representing the first group for testing 'different'
+hypotheses. This argument is only needed if 'different' is part of the hypothesis.}
 
-\item{grp_b}{A data frame representing the second group for testing 'different' hypotheses. This argument is only needed if 'different' is part of the hypothesis.}
+\item{grp_b}{A data frame representing the second group for testing 'different'
+hypotheses. This argument is only needed if 'different' is part of the hypothesis.}
 
-\item{phi_0}{A numeric value on the interval (0, 1) representing the decision rule threshold for the p-value. Defaults to 0.5.}
+\item{phi_0}{A numeric value on the interval (0, 1) representing the decision rule
+threshold for the p-value. Defaults to 0.5.}
 }
 \value{
-A numeric vector of 0s and 1s. If the hypothesis was incorrect, a 0 is returned. If the hypothesis was correct, a 1 is returned.
+A numeric vector of 0s and 1s. If the hypothesis was incorrect, a 0 is
+returned. If the hypothesis was correct, a 1 is returned.
 }
 \description{
-This function receives user input on the hypothesis of the experiment results and informs the user if the hypotheses were correct. It can handle hypotheses of 'increase', 'decrease', or 'different', and performs appropriate statistical tests.
+This function receives user input on the hypothesis of the experiment results
+and informs the user if the hypotheses were correct. It can handle hypotheses
+of 'increase', 'decrease', or 'different', and performs appropriate
+statistical tests.
 }
 \details{
-The function checks if the input hypotheses are valid, and performs the necessary statistical tests to determine if the hypotheses were correct. It handles 'increase' and 'decrease' hypotheses by comparing differences, and 'different' hypotheses by performing either a Wilcoxon signed-rank test or a paired t-test.
+The function checks if the input hypotheses are valid, and performs the
+necessary statistical tests to determine if the hypotheses were correct. It
+handles 'increase' and 'decrease' hypotheses by comparing differences, and
+'different' hypotheses by performing either a Wilcoxon signed-rank test
+or a paired t-test.
 }
 \examples{
 df_1 <- data.frame(v1 = c(1, 2, -100), v2 = c(40, 5, 6))
@@ -45,5 +62,6 @@ differences <- create_difference_vector(df_2, df_1)
 get_results_vector(hypothesis = 'increase', differences = differences)
 
 # using 'different' hypothesis and a pre post scenario
-get_results_vector(hypothesis = c('increase', 'different'), differences = differences, grp_a = df_1, grp_b = df_2, phi_0 = 0.05)
+get_results_vector(hypothesis = c('increase', 'different'),
+differences = differences, grp_a = df_1, grp_b = df_2, phi_0 = 0.05)
 }
