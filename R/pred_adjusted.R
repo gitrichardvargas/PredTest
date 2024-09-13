@@ -1,18 +1,30 @@
 #' Adjusted Predictions Based on Group Comparisons
 #'
-#' The `pred_adjusted` function calculates adjusted predictions for variables of interest, taking into account covariates and group comparisons. It then returns whether the results align with the hypothesized direction of effects.
+#'
+#' This function calculates adjusted predictions for variables of
+#' interest, taking into account covariates and group comparisons. It then returns
+#' whether the results align with the hypothesized direction of effects.
+#'
+#' @importFrom stats cov2cor
 #'
 #' @param dataset A data frame containing the data to be analyzed.
-#' @param hypothesis A string or vector of strings containing either 'increase' or 'decrease', indicating the expected direction of the effect.
-#' @param vars A vector of variable names in the dataset that are the outcomes of interest. These must be numeric columns.
-#' @param covariates A vector of covariates to include in the model. These must be numeric columns in the dataset.
-#' @param group The name of the grouping variable in the dataset. This must be a column in the dataset and should not overlap with `vars` or `covariates`.
-#' @param ref The reference category within the group variable. This must be a value present in the group column.
+#' @param hypothesis A string or vector of strings containing either 'increase'
+#' or 'decrease', indicating the expected direction of the effect.
+#' @param vars A vector of variable names in the dataset that are the outcomes
+#' of interest. These must be numeric columns.
+#' @param covariates A vector of covariates to include in the model. These must
+#' be numeric columns in the dataset.
+#' @param group The name of the grouping variable in the dataset. This must be
+#' a column in the dataset and should not overlap with `vars` or `covariates`.
+#' @param ref The reference category within the group variable. This must be a
+#' value present in the group column.
 #'
 #' @return A list with two elements:
 #' \describe{
-#'   \item{results}{A vector indicating whether each hypothesis was correct (1 for correct, 0 for incorrect).}
-#'   \item{weights}{A vector of weights corresponding to each variable in `vars`, calculated from the correlation matrix.}
+#'   \item{results}{A vector indicating whether each hypothesis was correct
+#'   (1 for correct, 0 for incorrect).}
+#'   \item{weights}{A vector of weights corresponding to each variable in `vars`,
+#'   calculated from the correlation matrix.}
 #' }
 #'
 #' @examples
@@ -20,10 +32,14 @@
 #' data("adjusted_example")
 #'
 #' # simple example
-#' pred_adjusted(adjusted_example, c("decrease", "increase"), c('v1', 'v2'), 'sex', "group", 0)
+#' pred_adjusted(adjusted_example, c("decrease", "increase"),
+#' c('v1', 'v2'), 'sex', "group", 0)
 #'
 #' # simulated example
-#' pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",vars = c('craft_verbatim', 'fluency_f_words_correct'),covariates = c('number_span_forward', 'number_span_backward'),group = "group.factor", ref = "Control")
+#' pred_adjusted(dataset = group_cog_data, hypothesis = "decrease",
+#' vars = c('craft_verbatim', 'fluency_f_words_correct'),
+#' covariates = c('number_span_forward', 'number_span_backward'),
+#' group = "group.factor", ref = "Control")
 #'
 #' @export
 pred_adjusted <- function(dataset, hypothesis, vars, covariates, group, ref){

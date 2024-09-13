@@ -1,18 +1,28 @@
 #' Predictive Results Wrapper Function
 #'
-#' This function is a wrapper that conditionally handles filtering by group or time, calculates the difference vector, and evaluates hypotheses to return a list of results.
+#' This function is a wrapper that conditionally handles filtering by group or
+#' time, calculates the difference vector, and evaluates hypotheses to return a
+#' list of results.
 #'
 #' @param dataset A data frame for research.
-#' @param id The column that identifies unique subjects. This should be `NULL` if `type` is 'group' and should not be `NULL` if `type` is 'prepost'.
+#' @param id The column that identifies unique subjects. This should be `NULL`
+#' if `type` is 'group' and should not be `NULL` if `type` is 'prepost'.
 #' @param vars The column variables of interest.
-#' @param type The type of study. Valid values are 'group' for group-based data and 'prepost' for pre-post data. Defaults to 'group'.
-#' @param hypothesis A vector or string of valid hypotheses: 'increase', 'decrease', or 'different'.
+#' @param type The type of study. Valid values are 'group' for group-based data
+#' and 'prepost' for pre-post data. Defaults to 'group'.
+#' @param hypothesis A vector or string of valid hypotheses: 'increase', 'decrease',
+#' or 'different'.
 #' @param gtvar The column of interest to divide the groups (e.g., time or treatment).
-#' @param grp_a The first subset of interest within the `gtvar` column (e.g., 'pre' or 'control').
-#' @param grp_b The second subset of interest within the `gtvar` column (e.g., 'post' or 'treatment').
-#' @param location The measure of central tendency to use for the difference calculation. Valid options are 'median' or 'mean'. Defaults to 'median'.
-#' @param diff_method The method to use for testing 'different' hypotheses. Valid options are 'wilcoxon' or 't'. Defaults to 'wilcoxon'.
-#' @param phi_0 The decision rule threshold for the p-value. If p-value < phi_0, then there's sufficient evidence for a success for a difference. Defaults to 0.50.
+#' @param grp_a The first subset of interest within the `gtvar` column
+#' (e.g., 'pre' or 'control').
+#' @param grp_b The second subset of interest within the `gtvar` column
+#' (e.g., 'post' or 'treatment').
+#' @param location The measure of central tendency to use for the difference
+#' calculation. Valid options are 'median' or 'mean'. Defaults to 'median'.
+#' @param diff_method The method to use for testing 'different' hypotheses. Valid
+#' options are 'wilcoxon' or 't'. Defaults to 'wilcoxon'.
+#' @param phi_0 The decision rule threshold for the p-value. If p-value < phi_0,
+#' then there's sufficient evidence for a success for a difference. Defaults to 0.50.
 #'
 #' @return A list containing:
 #' \describe{
@@ -21,7 +31,9 @@
 #'   \item{variables}{The column variables used in the analysis.}
 #' }
 #'
-#' @details This function performs error handling to ensure appropriate input values and types. It then filters the data based on the study type, calculates the difference vector, and evaluates the hypotheses using the specified method.
+#' @details This function performs error handling to ensure appropriate input values and
+#'  types. It then filters the data based on the study type, calculates the difference vector,
+#'  and evaluates the hypotheses using the specified method.
 #'
 #' @examples
 #' data("group_data_example")
@@ -30,16 +42,20 @@
 #' data("pre_post_fit")
 #'
 #' # simple group analysis
-#' pred_results(dataset=group_data_example, vars=c('v1', 'v2'),hypothesis=c("increase", "different"), gtvar="group", grp_a="placebo", grp_b="drug")
+#' pred_results(dataset=group_data_example, vars=c('v1', 'v2'),
+#' hypothesis=c("increase", "different"), gtvar="group", grp_a="placebo", grp_b="drug")
 #'
 #' # simple prepost analysis
-#' pred_results(dataset=pre_post_data_example, id="ID", vars=c('v1', 'v2', 'v3'),type="prepost", hypothesis="increase", gtvar="time", grp_a=0, grp_b=12)
+#' pred_results(dataset=pre_post_data_example, id="ID", vars=c('v1', 'v2', 'v3'),
+#' type="prepost", hypothesis="increase", gtvar="time", grp_a=0, grp_b=12)
 #'
 #' # simulated group analysis
-#' pred_results(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'), type="group", hypothesis="decrease", gtvar="group.factor", grp_a="Control", grp_b="ESKD")
+#' pred_results(dataset=group_cog_data, vars=c('blind_moca_uncorrected', 'craft_verbatim'),
+#' type="group", hypothesis="decrease", gtvar="group.factor", grp_a="Control", grp_b="ESKD")
 #'
 #' # simulated prepost analysis
-#' pred_results(dataset=pre_post_fit, id="ID", vars=c('Flex_right', 'Flex_left'), type="prepost", hypothesis="increase", gtvar="Time", grp_a=0, grp_b=1)
+#' pred_results(dataset=pre_post_fit, id="ID", vars=c('Flex_right', 'Flex_left'),
+#' type="prepost", hypothesis="increase", gtvar="Time", grp_a=0, grp_b=1)
 #' @export
 pred_results <- function(dataset,
                         id=NULL,

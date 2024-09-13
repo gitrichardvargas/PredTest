@@ -4,7 +4,7 @@
 #' This function performs statistical tests to determine the predictive power of a results set weighted by a corresponding vector of weights. It offers various methods to conduct the test, allowing flexibility depending on the data characteristics and analysis requirements.
 #' @importFrom stats pnorm rbinom
 #' @param weights_vector A numeric vector where each element represents the weight for a corresponding result in the results vector. Each value must be on the interval \eqn{[1/m, 1]}, where \eqn{m = 1/length(weights_vector)}.
-#' @param results_vector A numeric vector of test results where each element is in the set {0, 1}, representing the binary outcome of each prediction.
+#' @param results_vector A numeric vector of test results where each element is in the set \{0, 1\}, representing the binary outcome of each prediction.
 #' @param test_type A character string specifying the type of statistical test to perform. The valid options are 'exact', 'approx', or 'bootstrap'.
 #' @param phi_0 A numeric value on the interval (0, 1) representing the null hypothesis value against which the test results are compared.
 #' @param sims A natural number that specifies the number of simulations to perform when the bootstrap method is chosen. This parameter allows control over the robustness of the bootstrap approximation.

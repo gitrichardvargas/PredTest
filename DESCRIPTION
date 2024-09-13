@@ -1,20 +1,30 @@
 Package: PredTest
-Title: What the Package Does (One Line, Title Case)
+Title: Preparing Data for, and Calculating the Prediction Test
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("First", "Last", , "w672v506@kumc.edu", role = c("aut", "cre"), 
+           comment = c(ORCID = "0009-0008-4977-8776")),
+    person("Neal", "Montgomery", , "rmontgomery@kumc.edu", role = c(aut", "cre"), 
+           comment = c(ORCID = "0000-0002-1423-0590"))
+Description: Global hypothesis tests combine information across multiple endpoints to
+test a single hypothesis. The prediction test is a recently proposed global 
+hypothesis test with good performance for small sample sizes and many endpoints of 
+interest. The test is also flexible in the types and combinations of expected results 
+across the individual endpoints. The ‘PredTest’ package provides functions for data 
+processing and calculation of the prediction test.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
+    devtools,
+    ggplot2,
+    kableExtra,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
 LazyData: true
 VignetteBuilder: knitr

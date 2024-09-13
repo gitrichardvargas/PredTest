@@ -2,6 +2,7 @@
 #'
 #' This function calculates the difference between two groups of data based on a specified location measure (median or mean).
 #'
+#' @importFrom stats median
 #' @param grp_1_data A data frame where all columns are numeric, representing the first group of data.
 #' @param grp_2_data A data frame where all columns are numeric, representing the second group of data.
 #' @param location A string specifying the location measure to use for calculating differences. Must be either 'median' or 'mean'.

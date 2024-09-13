@@ -8,16 +8,21 @@
 #' @param grp_2 The second group identifier in the `grp_var` column, e.g., 'drug_a'.
 #' @param vars The column variables the researcher is interested in. The researcher can subset the columns instead of using all potential column variables.
 #'
-#' @return A list of two data frames that are subsets of the original data frame, separated by their group status.
+#' @return A list of two data frames that are subsets of the original
+#' data frame, separated by their group status.
 #'
-#' @details This function checks if the input data frame, group variable, and column variables are valid. It ensures that the specified groups exist within the group variable column. The function then filters the data for each group and returns a list containing the filtered data frames.
+#' @details This function checks if the input data frame, group variable,
+#' and column variables are valid. It ensures that the specified groups exist
+#' within the group variable column. The function then filters the data for each
+#' group and returns a list containing the filtered data frames.
 #'
 #' @examples
 #' # Load example data
 #' data("group_data_example")
 #'
 #' # Use the function to filter by group
-#' result <- filter_by_group_var(df=group_data_example, grp_var="group",grp_1 ='placebo',grp_2 ='drug',vars=c("v1", "v2"))
+#' result <- filter_by_group_var(df=group_data_example, grp_var="group",
+#' grp_1 ='placebo',grp_2 ='drug',vars=c("v1", "v2"))
 #' print(result$group_1)
 #' print(result$group_2)
 #'
