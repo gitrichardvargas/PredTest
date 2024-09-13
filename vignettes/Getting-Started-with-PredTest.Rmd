@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-devtools::install_github("gitrichardvargas/PredTest")
+
 library(PredTest)
 
 # Cognitive data set from the paclage
