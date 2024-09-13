@@ -2,10 +2,10 @@ Package: PredTest
 Title: Preparing Data for, and Calculating the Prediction Test
 Version: 0.0.0.9000
 Authors@R: 
-    person("Richard", "Vargas", email = "w672v506@kumc.edu", role = c("aut", "cre"), 
-           comment = c(ORCID = "0009-0008-4977-8776"))
+    c(person("Richard", "Vargas", email = "w672v506@kumc.edu", role = c("aut"), 
+           comment = c(ORCID = "0009-0008-4977-8776")), 
     person("Neal", "Montgomery", email = "rmontgomery@kumc.edu", role = c("aut", "cre"), 
-           comment = c(ORCID = "0000-0002-1423-0590"))
+           comment = c(ORCID = "0000-0002-1423-0590")))
 Description: Global hypothesis tests combine information across multiple endpoints to test a single hypothesis. The prediction test is a recently proposed global hypothesis test with good performance for small sample sizes and many endpoints of interest. The test is also flexible in the types and combinations of expected results across the individual endpoints. The ‘PredTest’ package provides functions for data processing and calculation of the prediction test.
 License: MIT + file LICENSE
 Encoding: UTF-8
