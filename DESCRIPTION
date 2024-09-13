@@ -2,7 +2,7 @@ Package: PredTest
 Title: Preparing Data for, and Calculating the Prediction Test
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "w672v506@kumc.edu", role = c("aut", "cre"), 
+    person("Richard", "Vargas", , "w672v506@kumc.edu", role = c("aut", "cre"), 
            comment = c(ORCID = "0009-0008-4977-8776")),
     person("Neal", "Montgomery", , "rmontgomery@kumc.edu", role = c(aut", "cre"), 
            comment = c(ORCID = "0000-0002-1423-0590"))
